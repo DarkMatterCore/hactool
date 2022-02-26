@@ -1,3 +1,4 @@
+#CC = i686-w64-mingw32-gcc
 CC = gcc
-CFLAGS = -O2 -Wall -Wextra -pedantic -std=gnu11 -fPIC
-LDFLAGS = -lmbedtls -lmbedx509 -lmbedcrypto
+CFLAGS = -O2 -Wall -Wextra -Wpedantic -Wno-implicit-fallthrough -Wno-overlength-strings -Wno-unused-parameter -Wno-unused-result -std=gnu11 -fPIC -static -s
+LDFLAGS = -lmbedtls -lmbedx509 -lmbedcrypto -static -s

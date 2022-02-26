@@ -1012,7 +1012,7 @@ void save_print(save_ctx_t *ctx) {
     printf("Save Type:                          %s\n", save_get_save_type(ctx));
     printf("Owner ID:                           %016"PRIx64"\n", ctx->header.extra_data.save_owner_id);
     char timestamp[70];
-    if (strftime(timestamp, sizeof(timestamp), "%F %T UTC", gmtime((time_t *)&ctx->header.extra_data.timestamp)))
+    if (strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S UTC", gmtime((time_t *)&ctx->header.extra_data.timestamp)))
         printf("Timestamp:                          %s\n", timestamp);
     printf("Save Data Size:                     0x%016"PRIx64"\n", ctx->header.extra_data.data_size);
     printf("Journal Size:                       0x%016"PRIx64"\n", ctx->header.extra_data.journal_size);
