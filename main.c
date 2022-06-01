@@ -117,15 +117,14 @@ int main(int argc, char **argv) {
     hactool_ctx_t tool_ctx;
     hactool_ctx_t base_ctx; /* Context for base NCA, if used. */
     nca_ctx_t nca_ctx;
-    char input_name[0x200];
-    filepath_t keypath;
+    filepath_t inputpath, keypath;
 
     prog_name = (argc < 1) ? "hactool" : argv[0];
 
     nca_init(&nca_ctx);
     memset(&tool_ctx, 0, sizeof(tool_ctx));
     memset(&base_ctx, 0, sizeof(base_ctx));
-    memset(input_name, 0, sizeof(input_name));
+    filepath_init(&inputpath);
     filepath_init(&keypath);
     nca_ctx.tool_ctx = &tool_ctx;
     nca_ctx.is_cli_target = true;
@@ -479,7 +478,7 @@ int main(int argc, char **argv) {
 
     if (optind == argc - 1) {
         /* Copy input filename. */
-        strncpy(input_name, argv[optind], sizeof(input_name) - 1);
+        filepath_set(&inputpath, argv[optind]);
     } else if (tool_ctx.file_type != FILETYPE_BOOT0 && ((optind < argc) || (argc == 1))) {
         usage();
     }
@@ -488,7 +487,7 @@ int main(int argc, char **argv) {
     if (tool_ctx.file_type == FILETYPE_NAX0) {
         nax0_ctx_t nax_ctx;
         memset(&nax_ctx, 0, sizeof(nax_ctx));
-        filepath_set(&nax_ctx.base_path, input_name);
+        filepath_copy(&nax_ctx.base_path, &inputpath);
         nax_ctx.tool_ctx = &tool_ctx;
         nax0_process(&nax_ctx);
 
@@ -507,8 +506,8 @@ int main(int argc, char **argv) {
         return EXIT_SUCCESS;
     }
 
-    if ((tool_ctx.file = fopen(input_name, "rb")) == NULL && tool_ctx.file_type != FILETYPE_BOOT0) {
-        fprintf(stderr, "unable to open %s: %s\n", input_name, strerror(errno));
+    if ((tool_ctx.file = os_fopen(inputpath.os_path, OS_MODE_READ)) == NULL && tool_ctx.file_type != FILETYPE_BOOT0) {
+        fprintf(stderr, "unable to open %s: %s\n", inputpath.char_path, strerror(errno));
         return EXIT_FAILURE;
     }
 
