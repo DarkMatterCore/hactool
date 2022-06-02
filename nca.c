@@ -1230,7 +1230,7 @@ void nca_process_bktr_section(nca_section_ctx_t *ctx) {
                 ctx->superblock_hash_validity = nca_section_check_external_hash_table(ctx, sb->ivfc_header.master_hash, cur_level->data_offset, cur_level->data_size, cur_level->hash_block_size, 1);
                 cur_level->hash_validity = ctx->superblock_hash_validity;
             }
-            if (ctx->tool_ctx->action & ACTION_VERIFY && i != 0) {
+            if (ctx->tool_ctx->action & ACTION_VERIFY && i != 0 && ctx->tool_ctx->base_file != NULL) {
                 /* Actually check the table. */
                 printf("    Verifying IVFC Level %"PRId32"...\n", i);
                 cur_level->hash_validity = nca_section_check_hash_table(ctx, cur_level->hash_offset, cur_level->data_offset, cur_level->data_size, cur_level->hash_block_size, 1);
